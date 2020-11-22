@@ -1,0 +1,31 @@
+<?php
+/**
+ * Add a new shortcode to display the progress bar for static campaign. On the Themes Donative
+ *
+ * After adding this, you can display progress bar with
+ * the following:
+ *
+ * [xt_ch_custom_campaign_progressbar]
+ */
+
+
+if( !function_exists( 'xt_ch_custom_campaign_progressbar_shortcode' ) ){
+function xt_ch_custom_campaign_progressbar_shortcode( $atts ){
+extract( shortcode_atts( array(
+'id' => ( is_singular( 'campaign' ) ? get_the_ID() : '' ),
+), $atts) );
+
+if( isset($id) && $id != '' ){
+$campaign = charitable_get_campaign( get_the_ID() );
+}
+
+ob_start();
+
+if( isset($campaign) && function_exists('donative_charitable_template_campaign_progress_bar_default')){
+donative_charitable_template_campaign_progress_bar_default( $campaign, '' );
+}
+
+return ob_get_clean();
+}
+}
+add_shortcode( 'xt_ch_custom_campaign_progressbar', 'xt_ch_custom_campaign_progressbar_shortcode' );
